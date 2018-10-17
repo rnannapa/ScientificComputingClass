@@ -1,0 +1,239 @@
+There are 256 address registers indexed by uchar arguments a1, a2 and a3 below.
+
+PADD a1 a2 a3
+  (void*)a1 = (void*)a2 + *((int*)a3)
+
+PSUB a1 a2 a3
+  *((int*)a1) = (void*)a2 - (void*)a3
+
+IADD a1 a2 a3
+  *((int*)a1) = *((int*)a2) + *((int*)a3)
+
+ISUB a1 a2 a3
+  *((int*)a1) = *((int*)a2) - *((int*)a3)
+
+IMUL a1 a2 a3
+  *((int*)a1) = *((int*)a2) * *((int*)a3)
+
+IDIV a1 a2 a3
+  *((int*)a1) = *((int*)a2) / *((int*)a3)
+
+IMIN a1 a2 a3
+  *((int*)a1) = min( *((int*)a2) , *((int*)a3) )
+
+IMAX a1 a2 a3
+  *((int*)a1) = max( *((int*)a2) , *((int*)a3) )
+
+FADD a1 a2 a3
+  *((float*)a1) = *((float*)a2) + *((float*)a3)
+
+FSUB a1 a2 a3
+  *((float*)a1) = *((float*)a2) - *((float*)a3)
+
+FMUL a1 a2 a3
+  *((float*)a1) = *((float*)a2) * *((float*)a3)
+
+FDIV a1 a2 a3
+  *((float*)a1) = *((float*)a2) / *((float*)a3)
+
+FMIN a1 a2 a3
+  *((float*)a1) = min( *((float*)a2) , *((float*)a3) )
+
+FMAX a1 a2 a3
+  *((float*)a1) = max( *((float*)a2) , *((float*)a3) )
+
+MFFI a1 a2 a3
+  *((float*)a1) = *((float*)a2) * *((int*)a3)
+
+DFFI a1 a2 a3
+  *((float*)a1) = *((float*)a2) / *((int*)a3)
+
+MBBF a1 a2 a3
+  *((uchar*)a1) = *((uchar*)a2) * *((float*)a3)   (result clipped to 0-255)
+
+MSSF a1 a2 a3
+  *((ushort*)a1) = *((ushort*)a2) * *((float*)a3) (result clipped to 0-65535)
+
+MOV  a1 a2 types
+  types in [0,7] 
+    retain sign.
+    types = 0:    *((int*)a1)   = *((int*)a2)
+    types = 1:    *((int*)a1)   = *((float*)a2)
+    types = 2:    *((float*)a1) = *((int*)a2)
+    types = 3:    *((float*)a1) = *((float*)a2)
+    change sign:
+    types = 4:    *((int*)a1)   = - *((int*)a2)
+    types = 5:    *((int*)a1)   = - *((float*)a2)
+    types = 6:    *((float*)a1) = - *((int*)a2)
+    types = 7:    *((float*)a1) = - *((float*)a2)
+
+COPY a1 a2 a3
+    memcpy( a1, a2, *((int*)a3) )
+
+LTP  a1 a2 a3
+    *((int*)a1) = (void*)a2 < (void*)a3
+
+LEP  a1 a2 a3
+    *((int*)a1) = (void*)a2 <= (void*)a3
+
+EQP  a1 a2 a3
+    *((int*)a1) = (void*)a2 == (void*)a3
+
+NEP  a1 a2 a3
+    *((int*)a1) = (void*)a2 != (void*)a3
+
+LTI  a1 a2 a3
+    *((int*)a1) = *((int*)a2) < *((int*)a3)
+
+LEI  a1 a2 a3
+    *((int*)a1) = *((int*)a2) <= *((int*)a3)
+
+EQI  a1 a2 a3
+    *((int*)a1) = *((int*)a2) == *((int*)a3)
+
+NEI  a1 a2 a3
+    *((int*)a1) = *((int*)a2) != *((int*)a3)
+
+LTF  a1 a2 a3
+    *((int*)a1) = *((float*)a2) < *((float*)a3)
+
+LEF  a1 a2 a3
+    *((int*)a1) = *((float*)a2) <= *((float*)a3)
+
+EQF  a1 a2 a3
+    *((int*)a1) = *((float*)a2) == *((float*)a3)
+
+NEF  a1 a2 a3
+    *((int*)a1) = *((float*)a2) != *((float*)a3)
+
+LAND a1 a2 a3
+    *((int*)a1) = *((int*)a2) && *((int*)a3)
+
+LOR  a1 a2 a3
+    *((int*)a1) = *((int*)a2) || *((int*)a3)
+
+AND  a1 a2 a3
+    *((int*)a1) = *((int*)a2) & *((int*)a3)
+
+OR   a1 a2 a3
+    *((int*)a1) = *((int*)a2) | *((int*)a3)
+
+SHFT a1 a2 a3
+    *((uint*)a1) = *((uint*)a2) << *((int*)a3) (neg val => right shift)
+
+CJMP a1 pc1 pc0
+    if( *((int*)a1) ) program counter = pc1*256 + pc0
+    (pc1 and pc0 in [0,255] => max program length 65536 instructions)
+
+IMOD a1 a2 a3
+    *((int*)a1) = *((int*)a2) % *((int*)a3)
+
+IABS a1 a2 a3
+    *((int*)a1) = abs( *((int*)a2) ) * *((int*)a3)
+
+FMOD a1 a2 a3
+    *((float*)a1) = fmod( *((float*)a2) , *((float*)a3) )
+
+FABS a1 a2 a3
+    *((float*)a1) = fabs( *((float*)a2) ) * *((float*)a3)
+
+SQRT a1 a2 a3
+    *((float*)a1) = *((float*)a3) * sqrt( *((float*)a2) )
+
+OSQR a1 a2 a3
+    *((float*)a1) = *((float*)a3) / sqrt( *((float*)a2) )
+
+EXP  a1 a2 a3
+    *((float*)a1) = exp( *((float*)a2) ) * *((float*)a3)
+
+LOG  a1 a2 a3
+    *((float*)a1) = log( *((float*)a2) ) * *((float*)a3)
+
+POW  a1 a2 a3
+    *((float*)a1) = pow( *((float*)a2) , *((float*)a3) )
+
+SIN  a1 a2 a3
+    *((float*)a1) = sin( *((float*)a2) ) * *((float*)a3)
+
+COS  a1 a2 a3
+    *((float*)a1) = cos( *((float*)a2) ) * *((float*)a3)
+
+ATAN a1 a2 a3
+    *((float*)a1) = atan2( *((float*)a2) , *((float*)a3) )
+
+FLR  a1 a2 a3
+    *((float*)a1) = floor( *((float*)a2) ) * *((float*)a3)
+
+CEIL a1 a2 a3
+    *((float*)a1) = ceil( *((float*)a2) ) * *((float*)a3)
+
+ROUN a1 a2 a3
+    *((float*)a1) = round( *((float*)a2) ) * *((float*)a3)
+
+=== What follows are specific to openGL (matrix) applications. ===
+
+GLYAX4 a1 a2 a3
+  4x4 matrix mult 4 vec.
+  rx ~ a1+0  = A4x4 ~ a2 (column-wise) x ~ a3+0
+  ry ~ a1+1                            y ~ a3+1
+  rz ~ a1+2                            z ~ a3+2
+  rw ~ a1+3                            w ~ a3+3
+
+GLYAX3 a1 a2 a3
+  4x4 matrix mult 3 vec.
+  rx ~ a1+0  = A4x4 ~ a2 (column-wise) x ~ a3+0
+  ry ~ a1+1                            y ~ a3+1
+  rz ~ a1+2                            z ~ a3+2
+                                       *w = 1.0
+
+GLYAX2 a1 a2 a3
+  4x4 matrix mult 2 vec.
+  rx ~ a1+0  = A4x4 ~ a2 (column-wise) x ~ a3+0
+  ry ~ a1+1                            y ~ a3+1
+                                       *z = 0.0
+                                       *w = 1.0
+
+GLYAX1 a1 a2 a3
+  4x4 matrix mult 1 vec.
+  rx ~ a1+0  = A4x4 ~ a2 (column-wise) x ~ a3+0
+                                       *y - 0.0
+                                       *z = 0.0
+                                       *w = 1.0
+
+GLPA4 a1 a2 a3
+  incr 4 pointers.
+  (void*)(a1+0) = (void*)(a2+0) + *((int*)a3)
+  (void*)(a1+1) = (void*)(a2+1) + *((int*)a3)
+  (void*)(a1+2) = (void*)(a2+2) + *((int*)a3)
+  (void*)(a1+3) = (void*)(a2+3) + *((int*)a3)
+
+GLPA3 a1 a2 a3
+  incr 3 pointers.
+  (void*)(a1+0) = (void*)(a2+0) + *((int*)a3)
+  (void*)(a1+1) = (void*)(a2+1) + *((int*)a3)
+  (void*)(a1+2) = (void*)(a2+2) + *((int*)a3)
+
+GLPA2 a1 a2 a3
+  incr 2 pointers.
+  (void*)(a1+0) = (void*)(a2+0) + *((int*)a3)
+  (void*)(a1+1) = (void*)(a2+1) + *((int*)a3)
+
+GLAITS a1 a2 what
+  4x4 inverse and/or transpose.
+  R    ~ a1 (output)
+  A4x4 ~ a2 (input)
+  what & 1: compute A^{-1}
+  what & 2: compute A^T
+  what & 4: extract 3x3 to R.
+      else: extract 4x4 to R.
+
+GLNR2 a1 a2 a3
+  2 vec normalize.
+  rx ~ a1+0  x ~ a2+0   vec2_r = (*((float*)a3)/||vec2_x||) vec2_x
+  ry ~ a1+1  y ~ a2+1
+
+GLNR3 a1 a2 a3
+  3 vec normalize.
+  rx ~ a1+0  x ~ a2+0   vec3_r = (*((float*)a3)/||vec3_x||) vec3_x
+  ry ~ a1+1  y ~ a2+1
+  rz ~ a1+2  z ~ a2+2

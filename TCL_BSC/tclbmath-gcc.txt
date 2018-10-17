@@ -1,0 +1,12 @@
+On ubuntu install
+> sudo apt update
+> sudo apt install tcl-dev
+
+compile on 64 bit linux
+> gcc -I/usr/include/tcl -Wno-unused-result -DUSE_TCL_STUBS -O -shared \
+    tclbmath.c -fPIC -ltclstub -o tclbmath-l64.so
+
+compile on 32 bit linux
+> gcc -I/usr/include/tcl -Wno-unused-result -DUSE_TCL_STUBS -O -shared \
+    tclbmath.c -fPIC -ltclstub -o tclbmath-l32.so
+
