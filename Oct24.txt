@@ -1,0 +1,62 @@
+# Oct 24th #
+# 3rd Project Fortran and C connection
+
+Ex1: Allocate memory in C and use in fortran
+
+All variables in fortran are local variables.
+
+	ialloc.c file
+run gcc -c ialloc.c to get ialloc.o
+
+gfortran test_ialloc.f ialloc.o  << Linking
+
+
+Fortran strips the spaces and compiles.
+
+varies from compiler to compiler
+#define <IALLOC> <ialloc_> to change it everywhere
+
+to debug use GDB <CHECK FOR THE COMMAND>
+
+No modification in c compiler
+
+Everything in fortran is passed as a pointer/address
+
+Fortran arrays starts at whereever we intend to 
+
+a(0:0) array with one word with 0to0.
+
+ioff >> offset
+
+integrer*8 for 8 bytes
+
+10 4 byte words and divide by 4
+
+======================================================================
+Ex: 2
+Reciprocal
+
+Newtons Method:
+x(n+1) = x(n) - [f(x(n))/f'(x(n))]
+
+
+Fortran implicit datatypes
+
+variable names starts from a-h o-z are floats unless specified otherwise and i-n by default are integers
+
+implicit none makes it more regerous by making user give datatypes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

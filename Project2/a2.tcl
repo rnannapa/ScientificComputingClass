@@ -13,9 +13,10 @@ if {$argc != 1} {
 set size [lindex $argv 0]
 
 set pgm [::bmath::compile \
-  { Ba } { {0 n 0} {1 n 1} {2 n 2} {4 n 4} \
-  {pi f 3.14159265} {i1 n 0} {i2 n $size} {i3 f 1.0} i tmp th dth l ba } \
+  { Bs Ba } { {0 n 0} {1 n 1} {2 n 2} {4 n 4} \
+  {pi f 3.14159265} {i1 n 0} i2 {i3 f 1.0} i tmp th dth l ba } \
   {
+  	  MOV  $i2  $Bs 0 
       PADD $ba  $Ba  $0
       LTI  $l   $i2  $0
       CJMP $l   $L_Zero
@@ -38,9 +39,12 @@ set pgm [::bmath::compile \
    %L_Zero
   }]
 
-set barray [binary format x[expr 4*2*($size+1)] 0]
+set barray [binary format x[expr max(4*2*($size+1),0)] 0]
+
+set bsize  [binary format n $size]
+
 #puts [time {
-  ::bmath::run $pgm barray
+  ::bmath::run $pgm bsize barray
 #} 100]
 
 binary scan $barray f* vlst
