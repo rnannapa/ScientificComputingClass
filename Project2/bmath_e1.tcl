@@ -11,30 +11,22 @@ set pgm [::bmath::compile \
   { Ba } { {0 n 0} {1 n 1} {4 n 4} {i1 n 1} {i2 n $size} l ba } \
   {
       PADD $ba $Ba $0  #increments pointers
-      LTI  $l  $i2 $i1
-      CJMP $l $L_Done
+      LTI  $l  $i2 $i1 # l = i2 < i1
+      CJMP $l $L_Done  # if i2 < i1 go to end
     %L_Again
-      MOV  $ba $i1 0
-      IADD $i1 $i1 $1
-      PADD $ba $ba $4
-      LEI  $l  $i1 $i2
-      CJMP $l $L_Again
+      MOV  $ba $i1 0   # int (ba) = int(i1) without change in sign
+      IADD $i1 $i1 $1  # integer addition
+      PADD $ba $ba $4  # add 4 to pointer (pointer arth)
+      LEI  $l  $i1 $i2  # $l = i1 <=i2
+      CJMP $l $L_Again  # if above is true go back to start of loop
     %L_Done
   }]
 
 set barray [binary format x[expr 4*$size] 0]
-puts [time {
+#puts [time {
   ::bmath::run $pgm barray
-} 100]
+#} 100]
 
 binary scan $barray n* vlst
 puts $vlst
 
-puts [time {
-  set vlst {}
-  for {set i 1} {$i <= $size} {incr i} {
-    lappend vlst $i
-  }
-} 100]
-
-puts $vlst

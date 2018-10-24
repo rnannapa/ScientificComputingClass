@@ -1,0 +1,29 @@
+		%%FORTRAN TO C%%
+
+real a(100) : a(1), a(2),....,a(100)
+float a[100] :a(0), a(1),....,a(99)
+
+DOUBLY INDEXED ARRAY
+
+real a(100,2) : a(1,1), a(1,2)
+	   a(2,1), a(2,2)
+	   ....
+	   a(100,1), a(100,2)
+	   
+float a[100][2] :  
+	a[0] > pointer to a row 0
+	a is a type float**
+	
+	float* p = a[0]
+	p[0] = element a(1,1)
+	p[1] = element a(1,2)
+
+to dynamicaly allocate memory for doubly indexed array takes more memory
+
+Fortran allocates memory column wise
+a(i,j) in fortran a[(i-1)+(j-1)*100] 100 here is the straid. Fortran stores contiguously.
+
+
+
+
+

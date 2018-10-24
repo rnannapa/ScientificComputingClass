@@ -1,0 +1,34 @@
+bmath compile needs 3 arguments.Names to binary array. Bs> binary size, Ba> binary array.
+{<name> <float or int> <value>}
+
+NOTE: 1.0 is not a valid TCL name
+
+{1.0 f 1_0}
+{2 n 2} > assigns $2 a value of integer 2
+
+No cosines and sines in assembly. Branch to functions.
+
+$argc >> how many command line arguments that are available does not include the script name like in C.
+
+$argv0 >> Script name in TCL
+
+$argv >> 
+
+In tcl every internal variable is a string.
+
+Take the incomplete TCL script and complete the TCL code.
+
+keep usepackage at the top. (Make sure to check for size=0 and size<0). Name a2.tcl. 
+
+Do this loop:
+
+for( i = 0; i <= *size; i++ ) {
+    theta = i*dtheta;
+    *ptr++ = cos(theta);
+    *ptr++ = sin(theta);
+  } 
+
+
+
+
+
