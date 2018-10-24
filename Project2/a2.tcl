@@ -73,7 +73,8 @@ set pgm [::bmath::compile \
 # unset bsize barray
 # exit 0
 
-set barray [binary format x[expr 4*$size] 0]
+# set barray [binary format x[expr 4*$size] 0]
+set barray [binary format x[expr max(($size+1)*4)] 0]
 #puts [time {
   ::bmath::run $pgm barray
 #} 100]
