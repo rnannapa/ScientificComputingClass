@@ -1,0 +1,10 @@
+gcc -c osqrt.c
+gfortran osqrtTest.f osqrt.o 
+
+
+
+gfortran -c -O gausselim.f
+gcc -O inverse.c gausselim.o -o inverse -lm
+./inverse 1 2 3 4 5 6 7 8 8
+
+
