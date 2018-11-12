@@ -1,0 +1,24 @@
+Sqrt of a;
+a should be positive
+f(x) = x^2 - a
+
+x(n+1) = x(n) - f(x)/f'(x)
+	   = 0.5x + a/(2x)
+
+f(x) = 1/x^2 
+x(n+1) = x
+
+scale (a) such that a is in between 1-4
+
+Fortran passes by address, use * (pointer)
+
+move pointers and NOT DATA!!
+
+Compute 1/sqrt() using elimination.
+
+a*scale*scale
+
+x = 0.5
+
+x = 0.5*x(3.0 - a*x*x)
+

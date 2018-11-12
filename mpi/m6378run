@@ -1,0 +1,129 @@
+#!/bin/bash
+
+siginter=0
+sigready=0
+trap 'siginter=1' SIGINT
+trap 'sigready=1' SIGTERM
+
+# wait's return value of a simple command is its exit status,
+# or 128+n if the command was terminated by signal n.
+
+# !!! NSIG here must agree with its value in sys/signal.h !!!
+# This is my way to get it from bash. No gaps I hope.
+sign1=$(kill -l SIGUSR2); # posix required.
+for((NSIG=$sign1;;NSIG++)); do
+  kill -l $NSIG &> /dev/null
+  if [ $? -ne 0 ]; then
+    break 
+  fi
+done
+# NSIG now define.
+
+SIGINT=$(kill -l SIGINT); SIGTERM=$(kill -l SIGTERM)
+
+np=$1
+if [ $np -lt 1 ]
+then
+  echo "$0 argument np ($np) must be >= 1."
+  exit 1
+fi
+
+pgm="$2"
+if [ ! -x "$pgm" ]
+then
+  echo "Could not find executable \"$pgm\"."
+  exit 1
+fi
+
+args=${@:3}
+
+for(( id=0; id<$np; id++ ))
+do
+  "$pgm" $$ $np $id ${args} &
+  cid=$!
+  cidlst[$id]=$cid
+  while true
+  do
+    wait $cid
+    wait_status=$?
+    if [ $sigready -eq 1 ]; # pgm signaled init complete.
+    then
+      sigready=0
+      break
+    fi
+    if [ $siginter -eq 1 ]; # user interupt.
+    then
+      echo ^C
+      kill -SIGTERM ${cidlst[@]}
+      exit $((128+$SIGINT))
+    fi
+    if [ $wait_status -ge 127 ]; # process nonexistent or aborted by signal.
+    then
+      if [ $id -ge 1 ]
+      then
+        kill -SIGTERM ${cidlst[@]:0:$id}
+      fi      
+      if [ $wait_status -ge $((128+$NSIG)) ]
+      then
+        exit $(($wait_status-(128+$NSIG)))
+      else
+        exit $wait_status
+      fi
+    fi
+  done
+done
+
+## trap 'echo exiting from bash' EXIT
+
+for(( id=$np-1; id>=0; id-- )); # Backwards on purpose. Want id=0 (master) last.
+do
+
+  cid=${cidlst[$id]}
+  while true
+  do
+    wait $cid               # &> /dev/null
+    wait_status=$?
+    if [ $siginter -eq 1 ]; # user interupt.
+    then
+      echo ^C
+      kill -SIGTERM ${cidlst[@]}
+      exit $((128+$SIGINT))
+    fi
+    if [ $wait_status -eq $((128+$SIGTERM)) ]; # terminated by SIGTERM.
+    then
+      break
+    fi
+    if [ $wait_status -ge 127 ]; # pgm aborted itself.
+    then
+      if [ $id -ge 1 ]
+      then
+        kill -SIGTERM ${cidlst[@]:0:$id}
+      fi
+      if [ $wait_status -ge $((128+$NSIG)) ]
+      then
+        exit $(($wait_status-(128+$NSIG)))
+      else
+        exit $wait_status
+      fi
+    fi
+    break
+  done
+  unset cidlst[$id]
+done
+
+exit $wait_status
+
+################################################################################
+
+#killAllChildren() {
+#  jobs=$( jobs -p )
+#  if [ "$jobs" != "" ]
+#  then
+#    kill -SIGTERM $jobs
+#  fi
+#  if [ $wait_status -ne 127 -o $id -ne 0 ]; # there are jobs running.
+#  then
+#    $pgm $$ $np "M6378 Clean-up"; # This'll clean-up any hanging resources.
+##echo killAllChildren killed jobs: \"$jobs\"
+#  fi
+#}

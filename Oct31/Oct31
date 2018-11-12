@@ -1,0 +1,7 @@
+No dynamic allocation of memory in Fortran.
+
+real function factor( a, pivot, n )
+
+n size of matrix
+pivot switch rows
+

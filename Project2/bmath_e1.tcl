@@ -5,7 +5,7 @@
 
 source tclbmath.tcl
 
-set size 5
+set size 0
 
 
 set pgm [::bmath::compile \

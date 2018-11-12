@@ -1,0 +1,23 @@
+# Inverse is done in two steps 
+ 1. Factorizing
+ 2. Forward and Backward substitution
+
+stdio doesnt have executables
+printf is in libc directory.
+-lm math library is not in libc
+.so shared object for executable. 
+.a archive file
+if both .a and .so are present it uses .so file to link.
+
+Static link: Running a code that we are linking to is injected into the executable and can port the code around. The code becomes larger.
+
+Dynamic linking: Linking at run time. Cant port the code.
+
+on mac remove -lrt in the readme file of mpi to run
+
+Put your installed software in /usr/local/
+
+.so file in usr/local/bin
+
+.h file in usr/local/include
+

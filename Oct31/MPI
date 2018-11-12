@@ -1,0 +1,11 @@
+libm6378.c MPI library
+MPI header file
+m6378run to run MPI
+
+gcc -I. >> to include from current working directory
+
+setenv C_INCLUDE_PATH (PATH) >> adding a env variable
+
+
+
+
